@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CSV Upload</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2em;
+      }
+      form {
+        margin-bottom: 2em;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background: #f4f4f4;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Upload CSV File</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv" required />
+      <button type="submit">Upload</button>
+    </form>
+    {% if headers and rows %}
+    <h2>CSV Contents</h2>
+    <table>
+      <thead>
+        <tr>
+          {% for header in headers %}
+          <th>{{ header }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          {% for cell in row %}
+          <td>{{ cell }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+        <tr style="font-weight:bold;background:#f9f9f9;">
+          <td colspan="{{ headers|length - 3 }}" style="text-align:right">Total</td>
+          <td>{{ '%.2f' % total_purchase }}</td>
+          <td>{{ '%.2f' % total_profit_loss }}</td>
+          <td>{{ '%.2f' % total_percent_profit_loss }}%</td>
+        </tr>
+      </tbody>
+    </table>
+    {% endif %}
+  </body>
+</html>
