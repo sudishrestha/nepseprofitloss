@@ -29,3 +29,7 @@ This is a simple FastAPI web application that allows users to upload a CSV file 
 
 - The app expects a CSV with headers similar to `import_sample.csv`.
 - No data is stored on the server; the CSV is parsed in-memory per upload.
+
+## RUN
+
+- uvicorn main:app --reload

@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LDH5B3LR2F"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-LDH5B3LR2F');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share Portfolio Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .text-success {
+      color: #27ae60 !important;
+    }
+
+    .text-danger {
+      color: #e74c3c !important;
+    }
+
+    .text-info {
+      color: #2980b9 !important;
+    }
+
+    .fw-bold {
+      font-weight: bold;
+    }
+
+    /* Modern Filter Styles */
+    #filterControls {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-bottom: 2px solid #dee2e6;
+    }
+
+    .filter-input {
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.2s ease-in-out;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-input:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+      outline: 0;
+    }
+
+    .filter-select {
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
+      background: white;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-select:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+      outline: 0;
+    }
+
+    .filter-badge {
+      background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .filter-badge:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(13, 110, 253, 0.4);
+    }
+
+    .filter-badge .remove-filter {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .filter-badge .remove-filter:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .filter-label {
+      font-weight: 600;
+      color: #495057;
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .filter-row {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e9ecef;
+    }
+
+    .table-filtered-row {
+      background-color: rgba(13, 110, 253, 0.05) !important;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    /* Desktop - no horizontal scroll */
+    body {
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 100%;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    /* Desktop table styling */
+    .table-responsive {
+      overflow-x: visible !important;
+    }
+
+    #portfolioTable {
+      font-size: 0.9rem;
+      table-layout: fixed;
+      width: 100%;
+    }
+
+    #portfolioTable th,
+    #portfolioTable td {
+      padding: 0.5rem 0.25rem;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      max-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Specific column widths for better fit */
+    #portfolioTable th:nth-child(1),
+    #portfolioTable td:nth-child(1) {
+      width: 4%;
+    }
+
+    /* S.N */
+
+    #portfolioTable th:nth-child(2),
+    #portfolioTable td:nth-child(2) {
+      width: 8%;
+    }
+
+    /* Scrip */
+
+    #portfolioTable th:nth-child(3),
+    #portfolioTable td:nth-child(3) {
+      width: 8%;
+    }
+
+    /* Current Balance */
+
+    #portfolioTable th:nth-child(4),
+    #portfolioTable td:nth-child(4) {
+      width: 8%;
+    }
+
+    /* Last Closing Price */
+
+    #portfolioTable th:nth-child(5),
+    #portfolioTable td:nth-child(5) {
+      width: 10%;
+    }
+
+    /* Value as of Last Closing Price */
+
+    #portfolioTable th:nth-child(6),
+    #portfolioTable td:nth-child(6) {
+      width: 8%;
+    }
+
+    /* LTP */
+
+    #portfolioTable th:nth-child(7),
+    #portfolioTable td:nth-child(7) {
+      width: 10%;
+    }
+
+    /* Value as of LTP */
+
+    #portfolioTable th:nth-child(8),
+    #portfolioTable td:nth-child(8) {
+      width: 10%;
+    }
+
+    /* Today's Gain */
+
+    #portfolioTable th:nth-child(9),
+    #portfolioTable td:nth-child(9) {
+      width: 8%;
+    }
+
+    /* WACC Rate */
+
+    #portfolioTable th:nth-child(10),
+    #portfolioTable td:nth-child(10) {
+      width: 10%;
+    }
+
+    /* Total Cost of Capital */
+
+    #portfolioTable th:nth-child(11),
+    #portfolioTable td:nth-child(11) {
+      width: 8%;
+    }
+
+    /* Difference */
+
+    #portfolioTable th:nth-child(12),
+    #portfolioTable td:nth-child(12) {
+      width: 8%;
+    }
+
+    /* Difference Percentage */
+
+    /* Tablet and Mobile - Enable horizontal scroll */
+    @media (max-width: 992px) {
+
+      /* Enable horizontal scroll for smaller screens */
+      body {
+        overflow-x: auto !important;
+      }
+
+      .table-responsive {
+        overflow-x: auto !important;
+      }
+
+      /* Fixed table layout for better scrolling */
+      #portfolioTable {
+        table-layout: auto !important;
+        min-width: 1200px;
+        /* Minimum width to ensure all columns are readable */
+        font-size: 0.8rem;
+      }
+
+      #portfolioTable th,
+      #portfolioTable td {
+        white-space: nowrap !important;
+        min-width: 80px;
+        /* Minimum column width */
+        padding: 0.4rem 0.3rem;
+      }
+
+      /* Specific minimum widths for important columns */
+      #portfolioTable th:nth-child(1),
+      #portfolioTable td:nth-child(1) {
+        min-width: 40px;
+      }
+
+      /* S.N */
+
+      #portfolioTable th:nth-child(2),
+      #portfolioTable td:nth-child(2) {
+        min-width: 60px;
+      }
+
+      /* Scrip */
+
+      #portfolioTable th:nth-child(5),
+      #portfolioTable td:nth-child(5) {
+        min-width: 120px;
+      }
+
+      /* Value as of Last Closing Price */
+
+      #portfolioTable th:nth-child(7),
+      #portfolioTable td:nth-child(7) {
+        min-width: 100px;
+      }
+
+      /* Value as of LTP */
+
+      #portfolioTable th:nth-child(8),
+      #portfolioTable td:nth-child(8) {
+        min-width: 100px;
+      }
+
+      /* Today's Gain */
+
+      #portfolioTable th:nth-child(10),
+      #portfolioTable td:nth-child(10) {
+        min-width: 120px;
+      }
+
+      /* Total Cost of Capital */
+
+      #portfolioTable th:nth-child(12),
+      #portfolioTable td:nth-child(12) {
+        min-width: 80px;
+      }
+
+      /* Difference Percentage */
+    }
+
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      #portfolioTable {
+        font-size: 0.75rem;
+        min-width: 1000px;
+        /* Slightly smaller for mobile */
+      }
+
+      #portfolioTable th,
+      #portfolioTable td {
+        padding: 0.3rem 0.2rem;
+        min-width: 70px;
+      }
+
+      .container {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .card-body {
+        padding: 0.75rem;
+      }
+
+      .row.g-3 {
+        margin: 0;
+      }
+
+      .col-md-5,
+      .col-md-2 {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+      }
+    }
+
+    /* Extra small screens */
+    @media (max-width: 576px) {
+      #portfolioTable {
+        font-size: 0.7rem;
+        min-width: 900px;
+        /* Even smaller for very small screens */
+      }
+
+      #portfolioTable th,
+      #portfolioTable td {
+        padding: 0.25rem 0.15rem;
+        min-width: 60px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .card-header {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+      <h1 class="mb-0">
+        Share Portfolio Dashboard
+        <button type="button" class="btn btn-link p-0 ms-2" data-bs-toggle="modal" data-bs-target="#howToModal"
+          title="How to use this dashboard" style="text-decoration: none; vertical-align: top;">
+          <svg width="20" height="20" fill="currentColor" class="bi bi-question-circle text-primary"
+            viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path
+              d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+          </svg>
+        </button>
+      </h1>
+      <div class="d-flex gap-2 mt-2 mt-md-0">
+        <a href="https://youtu.be/k2E-xz34caQ" target="_blank" rel="noopener noreferrer"
+          class="btn btn-outline-info btn-sm" title="Watch tutorial video">
+          <svg width="16" height="16" fill="currentColor" class="bi bi-play-circle me-1" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path
+              d="M6.271 5.055a.5.5 0 0 1 .52.038L11 7.055a.5.5 0 0 1 0 .89L6.791 9.907a.5.5 0 0 1-.791-.389V5.482a.5.5 0 0 1 .271-.427z" />
+          </svg>
+          How To Use
+        </a>
+        <div class="dropdown">
+          <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="importantLinksDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false" title="Important financial links">
+            <svg width="16" height="16" fill="currentColor" class="bi bi-link-45deg me-1" viewBox="0 0 16 16">
+              <path
+                d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z" />
+              <path
+                d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z" />
+            </svg>
+            Important Links
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="importantLinksDropdown">
+            <li>
+              <a class="dropdown-item" href="https://meroshare.cdsc.com.np/" target="_blank" rel="noopener noreferrer">
+                <svg width="16" height="16" fill="currentColor" class="bi bi-bank me-2" viewBox="0 0 16 16">
+                  <path
+                    d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.501.501 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89L8 0ZM3.777 3h8.447L8 1 3.777 3ZM2 6v7h1V6H2Zm2 0v7h2.5V6H4Zm3.5 0v7h1V6h-1Zm2 0v7H12V6H9.5ZM13 6v7h1V6h-1Zm2-1V4H1v1h14Zm-.39 9H1.39l-.25 1h13.72l-.25-1Z" />
+                </svg>
+                MeroShare Portal
+                <small class="text-muted d-block">Official CDSC Trading Platform</small>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <h6 class="dropdown-header">
+                <svg width="14" height="14" fill="currentColor" class="bi bi-info-circle me-1" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                  <path
+                    d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                </svg>
+                Quick Access
+              </h6>
+            </li>
+            <li>
+              <span class="dropdown-item-text">
+                <small class="text-muted">Access your portfolio data and trading information through official
+                  channels.</small>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">Upload CSV Files</div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-5">
+            <label for="waccFile" class="form-label">WACC File</label>
+            <input type="file" class="form-control" id="waccFile" accept=".csv" />
+          </div>
+          <div class="col-md-5">
+            <label for="shareFile" class="form-label">Share Value File</label>
+            <input type="file" class="form-control" id="shareFile" accept=".csv" />
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="button" id="analyzeBtn" class="btn btn-primary w-100">
+              Analyze
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="alertArea"></div>
+
+    <div id="resultsArea" class="d-none">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Portfolio Analysis Results</span>
+          <div class="btn-group" role="group">
+            <button type="button" id="downloadCsvBtn" class="btn btn-outline-success btn-sm" title="Download as CSV">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-spreadsheet"
+                viewBox="0 0 16 16">
+                <path
+                  d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z" />
+              </svg>
+              CSV
+            </button>
+            <button type="button" id="downloadPdfBtn" class="btn btn-outline-danger btn-sm" title="Download as PDF">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+                <path
+                  d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                <path
+                  d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.135.968z" />
+              </svg>
+              PDF
+            </button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <!-- Filter Controls -->
+          <div id="filterControls" class="p-3 bg-light border-bottom d-none">
+            <div class="row g-2 align-items-center">
+              <div class="col-auto">
+                <button id="toggleFilters" class="btn btn-outline-primary btn-sm">
+                  <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
+                    <path
+                      d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z" />
+                  </svg>
+                  Filters
+                </button>
+              </div>
+              <div class="col-auto">
+                <button id="clearFilters" class="btn btn-outline-secondary btn-sm">
+                  <svg width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                    <path
+                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                  </svg>
+                  Clear All
+                </button>
+              </div>
+              <div class="col">
+                <div id="activeFilters" class="d-flex flex-wrap gap-1"></div>
+              </div>
+            </div>
+            <div id="filterInputs" class="row g-2 mt-2 d-none"></div>
+          </div>
+
+          <div class="table-responsive">
+            <table id="portfolioTable" class="table table-striped mb-0"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Notice -->
+  <div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="alert alert-info border-0" style="
+              background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+              border-radius: 15px;
+            ">
+          <div class="d-flex align-items-center">
+            <svg width="24" height="24" fill="currentColor" class="bi bi-shield-check text-success me-3"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z" />
+              <path
+                d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+            </svg>
+            <div>
+              <p class="mb-0" style="
+                    font-style: italic;
+                    font-weight: bold;
+                    color: #2c3e50;
+                    font-size: 1rem;
+                  ">
+                🔒 <strong>Privacy & Security Notice:</strong> Your CSV files
+                are processed entirely within your browser. We do not upload,
+                store, or retain any of your financial data on our servers.
+                All calculations and analysis happen locally on your device,
+                ensuring complete privacy and security of your sensitive
+                portfolio information.
+              </p>
+              <small class="text-muted mt-1 d-block">
+                <svg width="12" height="12" fill="currentColor" class="bi bi-info-circle me-1" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                  <path
+                    d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                </svg>
+                This application works completely offline after initial load.
+                Your data never leaves your computer.
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How To Modal -->
+  <div class="modal fade" id="howToModal" tabindex="-1" aria-labelledby="howToModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="howToModalLabel">
+            <svg width="20" height="20" fill="currentColor" class="bi bi-book me-2" viewBox="0 0 16 16">
+              <path
+                d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
+            </svg>
+            How to Use Portfolio Dashboard
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <!-- Step 1 -->
+              <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0 text-primary">
+                    <span class="badge bg-primary rounded-circle me-2">1</span>
+                    Prepare Your CSV Files
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <p class="mb-2"><strong>You need two CSV files:</strong></p>
+                  <ul class="list-unstyled">
+                    <li class="mb-2">
+                      <svg width="16" height="16" fill="currentColor"
+                        class="bi bi-file-earmark-spreadsheet text-success me-2" viewBox="0 0 16 16">
+                        <path
+                          d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z" />
+                      </svg>
+                      <strong>WACC File:</strong> Contains scrip names and WACC rates
+                    </li>
+                    <li>
+                      <svg width="16" height="16" fill="currentColor"
+                        class="bi bi-file-earmark-spreadsheet text-info me-2" viewBox="0 0 16 16">
+                        <path
+                          d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h3v2H6zm4 0v-2h3v1a1 1 0 0 1-1 1h-2zm3-3h-3v-2h3v2zm-7 0v-2h3v2H6z" />
+                      </svg>
+                      <strong>Share Value File:</strong> Contains your portfolio holdings and current prices
+                    </li>
+                  </ul>
+                  <div class="alert alert-info">
+                    <small>
+                      <svg width="14" height="14" fill="currentColor" class="bi bi-info-circle me-1"
+                        viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                        <path
+                          d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                      </svg>
+                      You can download these files from <a href="https://meroshare.cdsc.com.np/" target="_blank"
+                        class="text-decoration-none">MeroShare Portal</a>
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0 text-primary">
+                    <span class="badge bg-primary rounded-circle me-2">2</span>
+                    Upload Your Files
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <ol class="ps-3">
+                    <li class="mb-2">Click <strong>"Choose File"</strong> for WACC File and select your WACC CSV</li>
+                    <li class="mb-2">Click <strong>"Choose File"</strong> for Share Value File and select your portfolio
+                      CSV</li>
+                    <li>Click the <strong>"Analyze"</strong> button to process your data</li>
+                  </ol>
+                  <div class="alert alert-success">
+                    <small>
+                      <svg width="14" height="14" fill="currentColor" class="bi bi-shield-check me-1"
+                        viewBox="0 0 16 16">
+                        <path
+                          d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z" />
+                        <path
+                          d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                      </svg>
+                      Your files are processed locally in your browser - no data is uploaded to any server!
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0 text-primary">
+                    <span class="badge bg-primary rounded-circle me-2">3</span>
+                    Analyze Your Results
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <p class="mb-2"><strong>The dashboard will calculate:</strong></p>
+                  <ul class="list-unstyled">
+                    <li class="mb-1">
+                      <span class="badge bg-success me-2">📈</span>
+                      <strong>Today's Gain:</strong> Daily profit/loss from price changes
+                    </li>
+                    <li class="mb-1">
+                      <span class="badge bg-info me-2">💰</span>
+                      <strong>Total Cost of Capital:</strong> Your investment based on WACC rates
+                    </li>
+                    <li class="mb-1">
+                      <span class="badge bg-warning me-2">📊</span>
+                      <strong>Difference:</strong> Current value vs. cost of capital
+                    </li>
+                    <li class="mb-1">
+                      <span class="badge bg-primary me-2">%</span>
+                      <strong>Difference Percentage:</strong> Performance percentage with color coding
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0 text-primary">
+                    <span class="badge bg-primary rounded-circle me-2">4</span>
+                    Use Advanced Features
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h6 class="text-secondary">
+                        <svg width="16" height="16" fill="currentColor" class="bi bi-funnel me-1" viewBox="0 0 16 16">
+                          <path
+                            d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z" />
+                        </svg>
+                        Filters
+                      </h6>
+                      <ul class="small">
+                        <li>Click "Filters" to show/hide filter options</li>
+                        <li>Filter by specific stocks using SCRIP dropdown</li>
+                        <li>Set min/max ranges for numeric values</li>
+                        <li>Search text in any column</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <h6 class="text-secondary">
+                        <svg width="16" height="16" fill="currentColor" class="bi bi-download me-1" viewBox="0 0 16 16">
+                          <path
+                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                          <path
+                            d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                        </svg>
+                        Export
+                      </h6>
+                      <ul class="small">
+                        <li><strong>CSV:</strong> Export data for Excel/spreadsheet analysis</li>
+                        <li><strong>PDF:</strong> Generate professional reports for sharing</li>
+                        <li>Both exports include filtered results</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Color Guide -->
+              <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0 text-primary">
+                    <svg width="16" height="16" fill="currentColor" class="bi bi-palette me-2" viewBox="0 0 16 16">
+                      <path
+                        d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                      <path
+                        d="M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8z" />
+                    </svg>
+                    Color Guide
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <div class="p-2 rounded bg-light">
+                        <span class="fw-bold text-success">🟢 Green</span>
+                        <br><small>Profit/Positive</small>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="p-2 rounded bg-light">
+                        <span class="fw-bold text-danger">🔴 Red</span>
+                        <br><small>Loss/Negative</small>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="p-2 rounded bg-light">
+                        <span class="fw-bold text-info">🔵 Blue</span>
+                        <br><small>Break-even/Zero</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light">
+          <div class="d-flex justify-content-between w-100 align-items-center">
+            <div>
+              <small class="text-muted">
+                <svg width="12" height="12" fill="currentColor" class="bi bi-youtube me-1" viewBox="0 0 16 16">
+                  <path
+                    d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z" />
+                </svg>
+                Need more help? <a href="https://youtu.be/k2E-xz34caQ" target="_blank"
+                  class="text-decoration-none">Watch our video tutorial</a>
+              </small>
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-check-lg me-1" viewBox="0 0 16 16">
+                <path
+                  d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+              </svg>
+              Got it!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    class PortfolioDashboard {
+      constructor() {
+        this.bindEvents();
+      }
+
+      bindEvents() {
+        document
+          .getElementById("analyzeBtn")
+          .addEventListener("click", () => this.analyze());
+
+        document
+          .getElementById("downloadCsvBtn")
+          .addEventListener("click", () => this.downloadCSV());
+
+        document
+          .getElementById("downloadPdfBtn")
+          .addEventListener("click", () => this.downloadPDF());
+
+        // Filter event listeners
+        document
+          .getElementById("toggleFilters")
+          .addEventListener("click", () => this.toggleFilterInputs());
+
+        document
+          .getElementById("clearFilters")
+          .addEventListener("click", () => this.clearAllFilters());
+      }
+
+      async analyze() {
+        try {
+          const waccFile = document.getElementById("waccFile").files[0];
+          const shareFile = document.getElementById("shareFile").files[0];
+
+          if (!waccFile || !shareFile) {
+            this.showAlert("Please select both CSV files.", "warning");
+            return;
+          }
+
+          this.showAlert("Processing files...", "info");
+
+          const [waccData, shareData] = await Promise.all([
+            this.parseCSV(waccFile),
+            this.parseCSV(shareFile),
+          ]);
+
+          shareData.pop();
+          const processedData = this.processData(waccData, shareData);
+          const totals = this.calculateTotals(processedData);
+          this.renderTable(processedData, totals);
+          this.hideAlert();
+        } catch (error) {
+          this.showAlert(`Error: ${error.message}`, "danger");
+        }
+      }
+
+      parseCSV(file) {
+        return new Promise((resolve, reject) => {
+          Papa.parse(file, {
+            header: true,
+            skipEmptyLines: true,
+            complete: (results) => {
+              if (results.errors.length > 0) {
+                reject(new Error(results.errors[0].message));
+              } else {
+                resolve(results.data);
+              }
+            },
+            error: (error) => reject(error),
+          });
+        });
+      }
+
+      processData(waccData, shareData) {
+        // Build WACC map for lookup
+        const waccMap = new Map();
+        waccData.forEach((row) => {
+          const scripName = (row["Scrip Name"] || "").trim().toUpperCase();
+          if (scripName) {
+            waccMap.set(scripName, row);
+          }
+        });
+
+        // Process each share row
+        return shareData.map((shareRow) => {
+          const scripName = (
+            shareRow["Scrip"] ||
+            shareRow["Scrip Name"] ||
+            ""
+          )
+            .trim()
+            .toUpperCase();
+          const waccRow = waccMap.get(scripName);
+
+          const quantity = parseFloat(shareRow["Current Balance"] || 0) || 0;
+          const ltp =
+            parseFloat(
+              shareRow["Last Transaction Price (LTP)"] || shareRow["LTP"] || 0
+            ) || 0;
+          const lastClosingPrice =
+            parseFloat(shareRow["Last Closing Price"] || 0) || 0;
+          const waccRate = waccRow
+            ? parseFloat(waccRow["WACC Rate"] || 0)
+            : 0;
+
+          // Calculate Today's Gain
+          const valueAsOfLTP = quantity * ltp;
+          const valueAsOfLastClosing = quantity * lastClosingPrice;
+          const todaysGain = valueAsOfLTP - valueAsOfLastClosing;
+
+          // Calculate other metrics
+          const totalCostOfCapital = quantity * waccRate;
+          const difference = valueAsOfLTP - totalCostOfCapital;
+          const differencePercentage = totalCostOfCapital
+            ? (difference / totalCostOfCapital) * 100
+            : 0;
+
+          // Create new row with calculated columns inserted in the right order
+          const newRow = {};
+
+          // Copy original columns first
+          Object.keys(shareRow).forEach((key) => {
+            newRow[key] = shareRow[key];
+
+            // Insert Today's Gain after Value as of LTP
+            if (key === "Value as of LTP") {
+              newRow["Today's Gain"] = todaysGain.toFixed(2);
+            }
+          });
+
+          // Add remaining calculated columns
+          newRow["WACC Rate"] = waccRate.toFixed(2);
+          newRow["Total Cost of Capital"] = totalCostOfCapital.toFixed(2);
+          newRow["Difference"] = difference.toFixed(2);
+          newRow["Difference Percentage"] = differencePercentage.toFixed(2);
+
+          return newRow;
+        });
+      }
+
+      calculateTotals(processedData) {
+        let totalValueAsOfLTP = 0;
+        let totalValueAsOfLastClosing = 0;
+        let totalTodaysGain = 0;
+        let totalCostOfCapital = 0;
+        let totalDifference = 0;
+
+        processedData.forEach((row) => {
+          // Calculate totals for all columns
+          const quantity = parseFloat(row["Current Balance"] || 0) || 0;
+          const ltp =
+            parseFloat(
+              row["Last Transaction Price (LTP)"] || row["LTP"] || 0
+            ) || 0;
+          const lastClosingPrice =
+            parseFloat(row["Last Closing Price"] || 0) || 0;
+
+          totalValueAsOfLTP += quantity * ltp;
+          totalValueAsOfLastClosing += quantity * lastClosingPrice;
+          totalTodaysGain += parseFloat(row["Today's Gain"] || 0) || 0;
+          totalCostOfCapital +=
+            parseFloat(row["Total Cost of Capital"] || 0) || 0;
+          totalDifference += parseFloat(row["Difference"] || 0) || 0;
+        });
+
+        const totalDifferencePercentage = totalCostOfCapital
+          ? (totalDifference / totalCostOfCapital) * 100
+          : 0;
+
+        return {
+          totalValueAsOfLTP: totalValueAsOfLTP.toFixed(2),
+          totalValueAsOfLastClosing: totalValueAsOfLastClosing.toFixed(2),
+          totalTodaysGain: totalTodaysGain.toFixed(2),
+          totalCostOfCapital: totalCostOfCapital.toFixed(2),
+          totalDifference: totalDifference.toFixed(2),
+          totalDifferencePercentage: totalDifferencePercentage.toFixed(2),
+        };
+      }
+
+      renderTable(data, totals) {
+        if (!data.length) return;
+
+        const headers = Object.keys(data[0]);
+        const table = document.getElementById("portfolioTable");
+
+        // Create header
+        let html = '<thead class="table-dark"><tr>';
+        headers.forEach((header) => {
+          html += `<th style="white-space: nowrap;">${header}</th>`;
+        });
+        html += "</tr></thead>";
+
+        // Create body
+        html += "<tbody>";
+        data.forEach((row) => {
+          html += "<tr>";
+          headers.forEach((header) => {
+            const value = row[header];
+            let cellClass = "";
+            let displayValue = value;
+
+            // Apply color coding to Today's Gain and Difference Percentage columns
+            if (header === "Today's Gain") {
+              const numValue = parseFloat(value);
+              cellClass = "fw-bold ";
+              if (numValue > 0) cellClass += "text-success";
+              else if (numValue < 0) cellClass += "text-danger";
+              else cellClass += "text-info";
+            } else if (header === "Difference Percentage") {
+              const numValue = parseFloat(value);
+              cellClass = "fw-bold ";
+              if (numValue > 0) cellClass += "text-success";
+              else if (numValue < 0) cellClass += "text-danger";
+              else cellClass += "text-info";
+              displayValue = `${value}%`;
+            }
+
+            html += `<td class="${cellClass}">${displayValue}</td>`;
+          });
+          html += "</tr>";
+        });
+        html += "</tbody>";
+
+        // Create footer with totals
+        html += '<tfoot class="table-secondary"><tr>';
+        headers.forEach((header, index) => {
+          let cellValue = "";
+          let cellClass = "fw-bold";
+
+          if (header === "Scrip" || header === "Scrip Name") {
+            cellValue = "TOTAL";
+          } else if (header === "Value as of Last Closing Price") {
+            cellValue = totals.totalValueAsOfLastClosing;
+          } else if (header === "Value as of LTP") {
+            cellValue = totals.totalValueAsOfLTP;
+          } else if (header === "Today's Gain") {
+            const numValue = parseFloat(totals.totalTodaysGain);
+            if (numValue > 0) cellClass += " text-success";
+            else if (numValue < 0) cellClass += " text-danger";
+            else cellClass += " text-info";
+            cellValue = totals.totalTodaysGain;
+          } else if (header === "Total Cost of Capital") {
+            cellValue = totals.totalCostOfCapital;
+          } else if (header === "Difference") {
+            cellValue = totals.totalDifference;
+          } else if (header === "Difference Percentage") {
+            const numValue = parseFloat(totals.totalDifferencePercentage);
+            if (numValue > 0) cellClass += " text-success";
+            else if (numValue < 0) cellClass += " text-danger";
+            else cellClass += " text-info";
+            cellValue = `${totals.totalDifferencePercentage}%`;
+          }
+
+          html += `<td class="${cellClass}">${cellValue}</td>`;
+        });
+        html += "</tr></tfoot>";
+
+        table.innerHTML = html;
+        document.getElementById("resultsArea").classList.remove("d-none");
+
+        // Show filter controls and initialize filters
+        document.getElementById("filterControls").classList.remove("d-none");
+        this.initializeFilters(data, headers);
+      }
+
+      showAlert(message, type) {
+        const alertArea = document.getElementById("alertArea");
+        alertArea.innerHTML = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+      }
+
+      hideAlert() {
+        document.getElementById("alertArea").innerHTML = "";
+      }
+
+      downloadCSV() {
+        const table = document.getElementById("portfolioTable");
+        if (!table || table.rows.length === 0) {
+          this.showAlert(
+            "No data to export. Please analyze your portfolio first.",
+            "warning"
+          );
+          return;
+        }
+
+        let csvContent = "";
+
+        // Get headers from table
+        const headerRow = table.querySelector("thead tr");
+        if (headerRow) {
+          const headers = Array.from(headerRow.cells).map(
+            (cell) => `"${cell.textContent.trim()}"`
+          );
+          csvContent += headers.join(",") + "\n";
+        }
+
+        // Get data rows (excluding totals footer)
+        const bodyRows = table.querySelectorAll("tbody tr");
+        bodyRows.forEach((row) => {
+          const cells = Array.from(row.cells).map((cell) => {
+            let value = cell.textContent.trim();
+            // Remove % symbol for percentage columns
+            if (value.endsWith("%")) {
+              value = value.slice(0, -1);
+            }
+            return `"${value}"`;
+          });
+          csvContent += cells.join(",") + "\n";
+        });
+
+        // Add totals row
+        const footerRow = table.querySelector("tfoot tr");
+        if (footerRow) {
+          const footerCells = Array.from(footerRow.cells).map((cell) => {
+            let value = cell.textContent.trim();
+            if (value.endsWith("%")) {
+              value = value.slice(0, -1);
+            }
+            return `"${value}"`;
+          });
+          csvContent += footerCells.join(",") + "\n";
+        }
+
+        // Create and download file
+        const blob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute(
+          "download",
+          `portfolio_analysis_${new Date().toISOString().split("T")[0]}.csv`
+        );
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        this.showAlert("CSV file downloaded successfully!", "success");
+      }
+
+      downloadPDF() {
+        const table = document.getElementById("portfolioTable");
+        if (!table || table.rows.length === 0) {
+          this.showAlert(
+            "No data to export. Please analyze your portfolio first.",
+            "warning"
+          );
+          return;
+        }
+
+        // Get headers
+        const headerRow = table.querySelector("thead tr");
+        const headers = Array.from(headerRow.cells).map((cell) =>
+          cell.textContent.trim()
+        );
+
+        // Get data rows
+        const bodyRows = table.querySelectorAll("tbody tr");
+        const dataRows = [];
+
+        bodyRows.forEach((row) => {
+          const rowData = {};
+          Array.from(row.cells).forEach((cell, index) => {
+            let value = cell.textContent.trim();
+            // Convert numeric values
+            if (!isNaN(value) && value !== "") {
+              value = parseFloat(value);
+            } else if (value.endsWith("%")) {
+              value = parseFloat(value.slice(0, -1));
+            }
+            rowData[headers[index]] = value;
+          });
+          dataRows.push(rowData);
+        });
+
+        // Get totals row
+        const footerRow = table.querySelector("tfoot tr");
+        const totalsData = {};
+        if (footerRow) {
+          Array.from(footerRow.cells).forEach((cell, index) => {
+            let value = cell.textContent.trim();
+            if (!isNaN(value) && value !== "" && value !== "TOTAL") {
+              value = parseFloat(value);
+            } else if (value.endsWith("%")) {
+              value = parseFloat(value.slice(0, -1));
+            }
+            totalsData[headers[index]] = value;
+          });
+        }
+
+        try {
+          // Initialize jsPDF
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF("l", "mm", "a4"); // Landscape orientation
+
+          // Add title
+          doc.setFontSize(18);
+          doc.setFont(undefined, "bold");
+          doc.text("Portfolio Analysis Report", 20, 20);
+
+          // Add date
+          doc.setFontSize(12);
+          doc.setFont(undefined, "normal");
+          doc.text(
+            `Generated on: ${new Date().toLocaleDateString()}`,
+            20,
+            30
+          );
+
+          // Get body rows for table
+          const bodyRows = table.querySelectorAll("tbody tr");
+          const tableData = [];
+
+          bodyRows.forEach((row) => {
+            const rowData = Array.from(row.cells).map((cell) =>
+              cell.textContent.trim()
+            );
+            tableData.push(rowData);
+          });
+
+          // Get totals row
+          const footerRow = table.querySelector("tfoot tr");
+          let totalsRow = null;
+          if (footerRow) {
+            totalsRow = Array.from(footerRow.cells).map((cell) =>
+              cell.textContent.trim()
+            );
+          }
+
+          // Configure autoTable
+          const tableConfig = {
+            head: [headers],
+            body: tableData,
+            startY: 40,
+            theme: "striped",
+            headStyles: {
+              fillColor: [52, 58, 64],
+              textColor: 255,
+              fontStyle: "bold",
+              fontSize: 8,
+            },
+            bodyStyles: {
+              fontSize: 7,
+              cellPadding: 2,
+            },
+            margin: { left: 10, right: 10 },
+            styles: {
+              overflow: "linebreak",
+              cellWidth: "wrap",
+            },
+            didParseCell: function (data) {
+              const header = headers[data.column.index];
+              const cellValue = data.cell.text[0];
+
+              if (
+                header === "Today's Gain" ||
+                header === "Difference Percentage"
+              ) {
+                let numValue = parseFloat(cellValue.replace("%", ""));
+                if (!isNaN(numValue)) {
+                  if (numValue > 0) {
+                    data.cell.styles.textColor = [39, 174, 96]; // Green
+                  } else if (numValue < 0) {
+                    data.cell.styles.textColor = [231, 76, 60]; // Red
+                  } else {
+                    data.cell.styles.textColor = [41, 128, 185]; // Blue
+                  }
+                }
+              }
+            },
+          };
+
+          // Generate the main table
+          doc.autoTable(tableConfig);
+
+          // Add totals section if available
+          if (totalsRow) {
+            const finalY = doc.lastAutoTable.finalY + 10;
+
+            doc.autoTable({
+              head: [headers],
+              body: [totalsRow],
+              startY: finalY,
+              theme: "grid",
+              headStyles: {
+                fillColor: [108, 117, 125],
+                textColor: 255,
+                fontStyle: "bold",
+                fontSize: 8,
+              },
+              bodyStyles: {
+                fontSize: 8,
+                fontStyle: "bold",
+                fillColor: [248, 249, 250],
+              },
+              margin: { left: 10, right: 10 },
+              didParseCell: function (data) {
+                const header = headers[data.column.index];
+                const cellValue = data.cell.text[0];
+
+                if (
+                  header === "Today's Gain" ||
+                  header === "Difference Percentage"
+                ) {
+                  let numValue = parseFloat(cellValue.replace("%", ""));
+                  if (!isNaN(numValue)) {
+                    if (numValue > 0) {
+                      data.cell.styles.textColor = [39, 174, 96];
+                    } else if (numValue < 0) {
+                      data.cell.styles.textColor = [231, 76, 60];
+                    } else {
+                      data.cell.styles.textColor = [41, 128, 185];
+                    }
+                  }
+                }
+              },
+            });
+          }
+
+          // Add footer
+          const pageCount = doc.internal.getNumberOfPages();
+          for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.text(
+              `Page ${i} of ${pageCount}`,
+              doc.internal.pageSize.width - 30,
+              doc.internal.pageSize.height - 10
+            );
+          }
+
+          // Save the PDF
+          const fileName = `portfolio_analysis_${new Date().toISOString().split("T")[0]
+            }.pdf`;
+          doc.save(fileName);
+
+          this.showAlert("PDF file downloaded successfully!", "success");
+        } catch (error) {
+          console.error("PDF generation error:", error);
+          this.showAlert("Error generating PDF. Please try again.", "danger");
+        }
+      }
+
+      // Filter Methods
+      initializeFilters(data, headers) {
+        this.originalData = data;
+        this.currentData = [...data];
+        this.headers = headers;
+        this.activeFilters = new Map();
+        this.createFilterInputs();
+      }
+
+      createFilterInputs() {
+        const filterInputsContainer = document.getElementById("filterInputs");
+        filterInputsContainer.innerHTML = "";
+
+        this.headers.forEach((header) => {
+          const col = document.createElement("div");
+          col.className = "col-md-3 col-sm-6";
+
+          const filterDiv = document.createElement("div");
+          filterDiv.className = "filter-row";
+
+          const label = document.createElement("div");
+          label.className = "filter-label";
+          label.textContent = header;
+
+          const isNumeric = this.isNumericColumn(header);
+
+          if (isNumeric) {
+            const rangeContainer = document.createElement("div");
+            rangeContainer.className = "d-flex gap-2";
+
+            const minInput = document.createElement("input");
+            minInput.type = "number";
+            minInput.className = "form-control form-control-sm filter-input";
+            minInput.placeholder = "Min";
+            minInput.step = "0.01";
+            minInput.dataset.column = header;
+            minInput.dataset.type = "min";
+            minInput.addEventListener("input", () => this.applyFilters());
+
+            const maxInput = document.createElement("input");
+            maxInput.type = "number";
+            maxInput.className = "form-control form-control-sm filter-input";
+            maxInput.placeholder = "Max";
+            maxInput.step = "0.01";
+            maxInput.dataset.column = header;
+            maxInput.dataset.type = "max";
+            maxInput.addEventListener("input", () => this.applyFilters());
+
+            rangeContainer.appendChild(minInput);
+            rangeContainer.appendChild(maxInput);
+            filterDiv.appendChild(label);
+            filterDiv.appendChild(rangeContainer);
+          } else {
+            // Check if this is the SCRIP column for dropdown
+            if (header === "Scrip" || header === "Scrip Name") {
+              const select = document.createElement("select");
+              select.className = "form-select form-select-sm filter-select";
+              select.dataset.column = header;
+
+              const defaultOption = document.createElement("option");
+              defaultOption.value = "";
+              defaultOption.textContent = "All Scrips";
+              select.appendChild(defaultOption);
+
+              // Get unique scrip values
+              const uniqueValues = this.getUniqueValues(header);
+              uniqueValues.forEach((value) => {
+                const option = document.createElement("option");
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+              });
+
+              select.addEventListener("change", () => this.applyFilters());
+              filterDiv.appendChild(label);
+              filterDiv.appendChild(select);
+            } else {
+              // Regular text input for other text columns
+              const input = document.createElement("input");
+              input.type = "text";
+              input.className = "form-control form-control-sm filter-input";
+              input.placeholder = `Search ${header}...`;
+              input.dataset.column = header;
+              input.addEventListener("input", () => this.debounceFilter());
+
+              filterDiv.appendChild(label);
+              filterDiv.appendChild(input);
+            }
+          }
+
+          col.appendChild(filterDiv);
+          filterInputsContainer.appendChild(col);
+        });
+      }
+
+      isNumericColumn(header) {
+        const numericColumns = [
+          "Current Balance",
+          "Last Closing Price",
+          "Value as of Last Closing Price",
+          "Last Transaction Price (LTP)",
+          "Value as of LTP",
+          "Today's Gain",
+          "WACC Rate",
+          "Total Cost of Capital",
+          "Difference",
+          "Difference Percentage",
+        ];
+        return numericColumns.includes(header);
+      }
+
+      getUniqueValues(header) {
+        const values = new Set();
+        this.originalData.forEach((row) => {
+          const value = row[header];
+          if (value !== undefined && value !== null && value !== "") {
+            values.add(value.toString().trim());
+          }
+        });
+        return Array.from(values).sort();
+      }
+
+      debounceFilter() {
+        clearTimeout(this.filterTimeout);
+        this.filterTimeout = setTimeout(() => this.applyFilters(), 300);
+      }
+
+      applyFilters() {
+        const filterInputsContainer = document.getElementById("filterInputs");
+        const inputs =
+          filterInputsContainer.querySelectorAll("input, select");
+
+        this.activeFilters.clear();
+
+        inputs.forEach((input) => {
+          const column = input.dataset.column;
+          const value = input.value.trim();
+
+          if (value) {
+            if (input.dataset.type === "min") {
+              if (!this.activeFilters.has(column)) {
+                this.activeFilters.set(column, {});
+              }
+              this.activeFilters.get(column).min = parseFloat(value);
+            } else if (input.dataset.type === "max") {
+              if (!this.activeFilters.has(column)) {
+                this.activeFilters.set(column, {});
+              }
+              this.activeFilters.get(column).max = parseFloat(value);
+            } else {
+              this.activeFilters.set(column, value);
+            }
+          }
+        });
+
+        this.currentData = this.originalData.filter((row) => {
+          return Array.from(this.activeFilters.entries()).every(
+            ([column, filter]) => {
+              const cellValue = row[column];
+
+              if (typeof filter === "object") {
+                const numValue = parseFloat(cellValue);
+                if (isNaN(numValue)) return false;
+
+                if (filter.min !== undefined && numValue < filter.min)
+                  return false;
+                if (filter.max !== undefined && numValue > filter.max)
+                  return false;
+                return true;
+              } else {
+                if (!cellValue) return false;
+                return cellValue
+                  .toString()
+                  .toLowerCase()
+                  .includes(filter.toLowerCase());
+              }
+            }
+          );
+        });
+
+        this.updateTableDisplay();
+        this.updateActiveFilterBadges();
+      }
+
+      updateTableDisplay() {
+        const table = document.getElementById("portfolioTable");
+        const tbody = table.querySelector("tbody");
+
+        if (this.currentData.length === 0) {
+          tbody.innerHTML = `
+              <tr>
+                <td colspan="${this.headers.length}" class="no-results">
+                  <div>
+                    <svg width="48" height="48" fill="currentColor" class="bi bi-search mb-2" viewBox="0 0 16 16">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    <div>No results found</div>
+                    <small class="text-muted">Try adjusting your filters</small>
+                  </div>
+                </td>
+              </tr>
+            `;
+          return;
+        }
+
+        let html = "";
+        this.currentData.forEach((row) => {
+          html += "<tr>";
+          this.headers.forEach((header) => {
+            const value = row[header];
+            let cellClass = "";
+            let displayValue = value;
+
+            if (header === "Today's Gain") {
+              const numValue = parseFloat(value);
+              cellClass = "fw-bold ";
+              if (numValue > 0) cellClass += "text-success";
+              else if (numValue < 0) cellClass += "text-danger";
+              else cellClass += "text-info";
+            } else if (header === "Difference Percentage") {
+              const numValue = parseFloat(value);
+              cellClass = "fw-bold ";
+              if (numValue > 0) cellClass += "text-success";
+              else if (numValue < 0) cellClass += "text-danger";
+              else cellClass += "text-info";
+              displayValue = `${value}%`;
+            }
+
+            html += `<td class="${cellClass}">${displayValue}</td>`;
+          });
+          html += "</tr>";
+        });
+
+        tbody.innerHTML = html;
+      }
+
+      updateActiveFilterBadges() {
+        const activeFiltersContainer =
+          document.getElementById("activeFilters");
+        activeFiltersContainer.innerHTML = "";
+
+        this.activeFilters.forEach((filter, column) => {
+          const badge = document.createElement("div");
+          badge.className = "filter-badge";
+
+          let filterText = "";
+          if (typeof filter === "object") {
+            const parts = [];
+            if (filter.min !== undefined) parts.push(`≥ ${filter.min}`);
+            if (filter.max !== undefined) parts.push(`≤ ${filter.max}`);
+            filterText = `${column}: ${parts.join(" & ")}`;
+          } else {
+            filterText = `${column}: "${filter}"`;
+          }
+
+          badge.innerHTML = `
+              <span>${filterText}</span>
+              <button class="remove-filter" data-column="${column}">×</button>
+            `;
+
+          badge
+            .querySelector(".remove-filter")
+            .addEventListener("click", (e) => {
+              this.removeFilter(e.target.dataset.column);
+            });
+
+          activeFiltersContainer.appendChild(badge);
+        });
+
+        if (this.activeFilters.size > 0) {
+          const countBadge = document.createElement("div");
+          countBadge.className = "badge bg-secondary ms-2";
+          countBadge.textContent = `${this.currentData.length} of ${this.originalData.length} rows`;
+          activeFiltersContainer.appendChild(countBadge);
+        }
+      }
+
+      toggleFilterInputs() {
+        const filterInputs = document.getElementById("filterInputs");
+        const toggleBtn = document.getElementById("toggleFilters");
+
+        if (filterInputs.classList.contains("d-none")) {
+          filterInputs.classList.remove("d-none");
+          toggleBtn.innerHTML = `
+              <svg width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+              </svg>
+              Hide Filters
+            `;
+        } else {
+          filterInputs.classList.add("d-none");
+          toggleBtn.innerHTML = `
+              <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
+                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/>
+              </svg>
+              Filters
+            `;
+        }
+      }
+
+      removeFilter(column) {
+        const filterInputsContainer = document.getElementById("filterInputs");
+        const inputs = filterInputsContainer.querySelectorAll(
+          `[data-column="${column}"]`
+        );
+        inputs.forEach((input) => {
+          input.value = "";
+        });
+        this.applyFilters();
+      }
+
+      clearAllFilters() {
+        const filterInputsContainer = document.getElementById("filterInputs");
+        const inputs =
+          filterInputsContainer.querySelectorAll("input, select");
+        inputs.forEach((input) => {
+          input.value = "";
+        });
+
+        this.activeFilters.clear();
+        this.currentData = [...this.originalData];
+        this.updateTableDisplay();
+        this.updateActiveFilterBadges();
+      }
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener("DOMContentLoaded", () => {
+      new PortfolioDashboard();
+    });
+  </script>
+</body>
+
+</html>

@@ -152,7 +152,8 @@
             rows.push(rowOut);
           });
           const total_percent_profit_loss = total_purchase
-            ? ((total_profit_loss / total_purchase) * 100).toFixed(2)
+            ? ((total_profit_loss / total_purchase) * 100).toFixed(2) +
+              "asdfasd"
             : "0.00";
           // Render table
           let html =
@@ -191,7 +192,8 @@
           else if (totalVal > 0) totalColor = "text-success";
           else if (totalVal === 0) totalColor = "text-info";
           html += `<th class="fw-bold ${totalColor}">${total_percent_profit_loss}%</th>`;
-          html += "</tr></tfoot></table>";
+          html += "</tr></tfoot>";
+          html += "</table>";
           document.getElementById("tableContainer").innerHTML = html;
           document.getElementById("tableContainer").style.display = "";
         });
